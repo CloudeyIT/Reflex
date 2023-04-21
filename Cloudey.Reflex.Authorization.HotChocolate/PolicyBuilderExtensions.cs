@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using HotChocolate;
+using HotChocolate.Resolvers;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Cloudey.Reflex.Authorization.HotChocolate;
@@ -69,6 +70,7 @@ public static class PolicyBuilderExtensions
 							IEnumerable<T> manyResults => manyResults.All(
 								x => expression.Invoke(x, context, middlewareContext)
 							),
+							Error => true,
 							_ => throw new ApplicationException(
 								"Invalid result type for result assertion requirement. Must be the same as the type of the target!"
 							),
@@ -116,6 +118,7 @@ public static class PolicyBuilderExtensions
 							IEnumerable<T> manyResults => manyResults.All(
 								x => expression.Invoke(x, context, middlewareContext)
 							),
+							Error => true,
 							_ => middlewareContext.Parent<object?>() switch
 							{
 								T parent => expression.Invoke(parent, context, middlewareContext),
@@ -200,6 +203,7 @@ public static class PolicyBuilderExtensions
 									x => expression.Invoke(x, context, middlewareContext)
 								)
 							)).All(x => x),
+							Error => true,
 							_ => throw new ApplicationException(
 								"Invalid result type for result assertion requirement. Must be the same as the type of the target!"
 							),
@@ -249,6 +253,7 @@ public static class PolicyBuilderExtensions
 									x => expression.Invoke(x, context, middlewareContext)
 								)
 							)).All(x => x),
+							Error => true,
 							_ => middlewareContext.Parent<object?>() switch
 							{
 								T parent => await expression.Invoke(parent, context, middlewareContext),
