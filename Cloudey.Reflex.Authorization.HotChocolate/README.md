@@ -25,7 +25,145 @@ services.AddGraphQLServer()
 
 ```
 
-### Authentication and authorization
+### Using the GraphQL assertions
+
+#### Parent assertion
+
+`RequireParentAssertion` enables you to assert that the _parent_ of a field fulfils a condition.
+
+
+**NOTE**
+When using projection, non-projected fields will _not_ be resolved in the delegate. Therefore, it is important that you mark any other fields that you need in your delegate with the `[IsProjected]` attribute to make sure they are always loaded, otherwise they will be `null` in the assertion delegate.
+
+The delegate receives the following arguments:
+- The _parent_ of type `T`
+- The authorization context `AuthorizationHandlerContext`
+- The GraphQL context `IMiddlewareContext`
+
+Example:
+```c#
+// UserPolicy.cs
+// IMPORTANT: Defining policies in this way requires setting up Cloudey.Reflex.Authorization
+public class SecretKeyPolicy : IPolicy
+{
+    public static AuthorizationPolicy Policy { get; } = new AuthorizationPolicyBuilder()
+        .RequireParentAssertion<User>(
+        // The secret key can only be accessed by the user itself or an admin
+            (user, context, directiveContext) => user.Id == context.User.GetId() || context.User.IsInRole(Role.Admin)
+        )
+        .Build();
+}
+
+// User.cs
+
+public class User : Entity {
+    // ...
+    [Guard<SecretKeyPolicy>]
+    public string SecretKey { get; set; }
+}
+```
+
+#### Field assertion
+
+`RequireResultAssertion` enables you to assert that the resolved entity or field fulfills a condition.
+
+**Important**  
+If the policy is applied to a field, the target is the value of the field.  
+If the policy is applied to a class, the target is the class instance.  
+If the policy is applied to a resolver, the target is the result of the resolver.  
+If the result is an IEnumerable, then the assertion is applied to all elements.
+
+The delegate receives the following arguments:
+- The _field value_ `T`
+- The authorization context `AuthorizationHandlerContext`
+- The GraphQL context `IMiddlewareContext`
+
+Example:
+```c#
+// UserPolicy.cs
+// IMPORTANT: Defining policies in this way requires setting up Cloudey.Reflex.Authorization
+public class AvatarPolicy : IPolicy
+{
+    public static AuthorizationPolicy Policy { get; } = new AuthorizationPolicyBuilder()
+        .RequireTargetAssertion<Avatar>(
+        // The avatar can only be accessed if it is set as public
+            (avatar, context, directiveContext) => avatar.IsPublic
+        )
+        .Build();
+}
+
+// User.cs
+
+public class User : Entity {
+    // ...
+    [Guard<AvatarPolicy>] // Can be applied here to only have an effect when accessed through User
+    public Avatar? Avatar { get; set; }
+}
+
+// Avatar.cs
+
+[Guard<AvatarPolicy>] // Can also be applied here to always have an effect whenever Avatar is resolved, incl. through other types
+public class Avatar : Entity {
+    // ...
+    public bool IsPublic { get; set; } 
+}
+```
+
+#### Related assertion
+
+`RequireRelatedAssertion` enables you to assert that the field or the entity containing the field fulfills a condition. This is useful for defining policies used on both fields, classes, and resolvers interchangeably.
+
+**Important**  
+If the policy is applied to a field with type T, the target is the value of the field.  
+If the policy is applied to a member of T which is not of type T, the target is an instance of the parent T.  
+If the policy is applied to a class of type T, the target is the instance of the class.  
+If the policy is applied to a resolver of return type T, the result is the result of the resolver.  
+If the result is an IEnumerable, then the assertion is applied to all elements.
+
+**NOTE**
+When using projection, non-projected fields will _not_ be resolved in the delegate. Therefore, it is important that you mark any other fields that you need in your delegate with the `[IsProjected]` attribute to make sure they are always loaded, otherwise they will be `null` in the resolver if the field is not requested.
+
+The delegate receives the following arguments:
+- The _related type_ `T`
+- The authorization context `AuthorizationHandlerContext`
+- The GraphQL context `IMiddlewareContext`
+
+Example:
+```c#
+// UserPolicy.cs
+// IMPORTANT: Defining policies in this way requires setting up Cloudey.Reflex.Authorization
+public class AvatarPolicy : IPolicy
+{
+    public static AuthorizationPolicy Policy { get; } = new AuthorizationPolicyBuilder()
+        .RequireRelatedAssertion<Avatar>(
+        // The avatar can only be accessed if it is set as public
+            (avatar, context, directiveContext) => avatar.IsPublic
+        )
+        .Build();
+}
+
+// User.cs
+
+public class User : Entity {
+    // ...
+    [Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar
+    public Avatar? Avatar { get; set; }
+}
+
+// Avatar.cs
+
+[Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar
+public class Avatar : Entity {
+    // ...
+    [Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar (the parent)
+    public bool IsPublic { get; set; } 
+    
+    [Guard<AvatarPolicy>] // Here, the assertion is applied to the FIELD of type Avatar (the field not the parent!)
+    public Avatar AlternativeAvatar { get; set; } // Just an example
+}
+```
+
+### Authorization in general
 
 To authenticate a given request, entity, or property, use the `[Guard]` attribute. The Guard attribute can be used to authenticate based on roles or a policy, and replaces the `Authorize` attribute from HotChocolate.
 
@@ -74,146 +212,6 @@ You can apply authorization attributes on multiple `levels`, and they will all b
 ### Using policies
 
 When simple role-based authentication is not enough, you can also use policies to create more complex authorization logic. For an easy way to implement policy-based authorization, see [Cloudey.Reflex.Authorization](https://www.nuget.org/packages/Cloudey.Reflex.Authorization/).
-
-### GraphQL assertions
-
-#### Parent assertion
-
-RequireParentAssertion` enables you to assert that the _parent_ of a field fulfils a condition.
-
-
-**NOTE**
-When using projection, non-projected fields will _not_ be resolved in the delegate. Therefore, it is important that you mark any other fields that you need in your delegate with the `[IsProjected]` attribute to make sure they are always loaded.
-
-The delegate receives the following arguments:
-- The _parent_ of type `T`
-- The authorization context `AuthorizationHandlerContext`
-- The GraphQL context `IMiddlewareContext`
-
-Example:
-```c#
-// UserPolicy.cs
-// IMPORTANT: Defining policies in this way requires setting up Cloudey.Reflex.Authorization
-public class UserPolicy : IPolicy
-{
-    public static AuthorizationPolicy Policy { get; } = new AuthorizationPolicyBuilder()
-        .RequireParentAssertion<User>(
-        // The logged in user can access his own user, and admin can access all users
-            (user, context, directiveContext) => user.Id == context.User.GetId() || context.User.IsInRole(Role.Admin)
-        )
-        .Build();
-}
-
-// User.cs
-
-[Guard<UserPolicy>]
-public class User : Entity {
-    // ...
-}
-```
-
-#### Field assertion
-
-`RequireResultAssertion` enables you to assert that the resolved entity or field.
-
-**Important**  
-If the policy is applied to a field, the target is the value of the field.  
-If the policy is applied to a class, the target is the class instance.  
-If the policy is applied to a resolver, the target is the result of the resolver.  
-If the result is an IEnumerable, then the assertion is applied to all elements.
-
-**NOTE**
-When using projection, non-projected fields will _not_ be resolved in the delegate. Therefore, it is important that you mark any other fields that you need in your delegate with the `[IsProjected]` attribute to make sure they are always loaded.
-
-The delegate receives the following arguments:
-- The _field value_ `T`
-- The authorization context `AuthorizationHandlerContext`
-- The GraphQL context `IMiddlewareContext`
-
-Example:
-```c#
-// UserPolicy.cs
-// IMPORTANT: Defining policies in this way requires setting up Cloudey.Reflex.Authorization
-public class AvatarPolicy : IPolicy
-{
-    public static AuthorizationPolicy Policy { get; } = new AuthorizationPolicyBuilder()
-        .RequireTargetAssertion<Avatar>(
-        // The avatar can only be accessed if it is set as public
-            (avatar, context, directiveContext) => avatar.IsPublic
-        )
-        .Build();
-}
-
-// User.cs
-
-public class User : Entity {
-    // ...
-    [Guard<AvatarPolicy>] // Can be applied here to only have an effect when accessed through User
-    public Avatar? Avatar { get; set; }
-}
-
-// Avatar.cs
-
-[Guard<AvatarPolicy>] // Can also be applied here to always have an effect when Avatar is resolved, incl. through other types
-public class Avatar : Entity {
-    // ...
-    public bool IsPublic { get; set; } 
-}
-```
-
-#### Related assertion
-
-`RequireRelatedAssertion` enables you to assert that the field or the entity containing the field fulfills a condition. This is useful for defining policies used on both fields and parents.
-
-**Important**  
-If the policy is applied to a field with type T, the target is the value of the field.  
-If the policy is applied to a member of T which is not of type T, the target is an instance of the parent T.  
-If the policy is applied to a class of type T, the target is the instance of the class.  
-If the policy is applied to a resolver of return type T, the result is the result of the resolver.  
-If the result is an IEnumerable, then the assertion is applied to all elements.
-
-**NOTE**
-When using projection, non-projected fields will _not_ be resolved in the delegate. Therefore, it is important that you mark any other fields that you need in your delegate with the `[IsProjected]` attribute to make sure they are always loaded.
-
-The delegate receives the following arguments:
-- The _related type_ `T`
-- The authorization context `AuthorizationHandlerContext`
-- The GraphQL context `IMiddlewareContext`
-
-Example:
-```c#
-// UserPolicy.cs
-// IMPORTANT: Defining policies in this way requires setting up Cloudey.Reflex.Authorization
-public class AvatarPolicy : IPolicy
-{
-    public static AuthorizationPolicy Policy { get; } = new AuthorizationPolicyBuilder()
-        .RequireRelatedAssertion<Avatar>(
-        // The avatar can only be accessed if it is set as public
-            (avatar, context, directiveContext) => avatar.IsPublic
-        )
-        .Build();
-}
-
-// User.cs
-
-public class User : Entity {
-    // ...
-    [Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar
-    public Avatar? Avatar { get; set; }
-}
-
-// Avatar.cs
-
-[Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar
-public class Avatar : Entity {
-    // ...
-    [Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar (the parent)
-    public bool IsPublic { get; set; } 
-    
-    [Guard<AvatarPolicy>] // Here, the assertion is applied to the FIELD of type Avatar (the field not the parent!)
-    public Avatar AlternativeAvatar { get; set; } // Just an example
-}
-```
 
 ### License
 
