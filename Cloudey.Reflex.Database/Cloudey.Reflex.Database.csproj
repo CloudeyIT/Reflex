@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Cloudey.Reflex.Core\Cloudey.Reflex.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="7.*" />
+      <PackageReference Include="EntityFrameworkCore.Triggers" Version="1.*" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.*" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.*" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.*" />
+      <PackageReference Include="Ulid" Version="1.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="LICENSE" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+</Project>
