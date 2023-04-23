@@ -9,7 +9,15 @@ An opinionated framework setup for common functionality.
 
 Install with [NuGet](https://www.nuget.org/packages/Cloudey.Reflex.Core/)
 
+For a quick start, use the `AddReflexCore` extension method on the host builder. This will register the logging, configuration, caching, validation, Autofac, and common ASP.NET Core services.
 
+```c#
+// Program.cs
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.AddReflexCore();
+```
 
 #### Git
 
