@@ -1,5 +1,4 @@
-﻿using EntityFrameworkCore.Triggers;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
@@ -8,7 +7,10 @@ namespace Cloudey.Reflex.Database;
 
 public static class DatabaseSetupExtensions
 {
-	public static IServiceCollection AddDatabase<TContext> (this IServiceCollection services, IConfiguration configuration) where TContext : DbContext
+	public static IServiceCollection AddDatabase<TContext> (
+		this IServiceCollection services,
+		IConfiguration configuration
+	) where TContext : DbContext
 	{
 		var migrationsAssembly = configuration.GetValue<string>("MigrationsAssembly");
 
@@ -35,7 +37,9 @@ public static class DatabaseSetupExtensions
 				.EnableSensitiveDataLogging()
 		);
 
-		services.AddScoped(provider => provider.GetRequiredService<IDbContextFactory<TContext>>().CreateDbContext());
+		services.AddScoped<TContext>(
+			provider => provider.GetRequiredService<IDbContextFactory<TContext>>().CreateDbContext()
+		);
 
 		return services;
 	}

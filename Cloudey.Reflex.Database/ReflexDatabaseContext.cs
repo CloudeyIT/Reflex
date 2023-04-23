@@ -14,40 +14,38 @@ public abstract class ReflexDatabaseContext<TUser, TRole, TContext> : IdentityDb
 {
 	public ReflexDatabaseContext (DbContextOptions<TContext> options) : base(options) { }
 
-	protected new virtual void ConfigureConventions (ModelConfigurationBuilder configurationBuilder)
+	protected override void ConfigureConventions (ModelConfigurationBuilder configurationBuilder)
 	{
 		base.ConfigureConventions(configurationBuilder);
-
+		
 		configurationBuilder.Properties<Ulid>()
 			.HaveConversion<UlidToGuidConverter>();
-		
-		
 	}
 	
-	protected new virtual void OnModelCreating (ModelBuilder builder)
+	protected override void OnModelCreating (ModelBuilder builder)
 	{
 		base.OnModelCreating(builder);
-
+		
 		AppDomain.CurrentDomain.GetIncludedAssemblies()
 			.ForEach(assembly => builder.ApplyConfigurationsFromAssembly(assembly));
 	}
 
-	public new virtual int SaveChanges ()
+	public override int SaveChanges ()
 	{
 		return this.SaveChangesWithTriggers(base.SaveChanges);
 	}
 
-	public new virtual int SaveChanges (bool acceptAllChangesOnSuccess)
+	public override int SaveChanges (bool acceptAllChangesOnSuccess)
 	{
 		return this.SaveChangesWithTriggers(base.SaveChanges, acceptAllChangesOnSuccess);
 	}
 
-	public new virtual Task<int> SaveChangesAsync (CancellationToken cancellationToken = default)
+	public override Task<int> SaveChangesAsync (CancellationToken cancellationToken = default)
 	{
 		return this.SaveChangesWithTriggersAsync(base.SaveChangesAsync, true, cancellationToken);
 	}
 
-	public new virtual Task<int> SaveChangesAsync (
+	public override Task<int> SaveChangesAsync (
 		bool acceptAllChangesOnSuccess,
 		CancellationToken cancellationToken = default
 	)
