@@ -54,6 +54,8 @@ public static class HotChocolateBuilderExtensions
 		builder.Services.RemoveAll<IHttpResponseFormatter>();
 		builder.Services.AddSingleton<IHttpResponseFormatter>(new CustomHttpResultFormatter());
 
+		builder.Services.AddSha256DocumentHashProvider();
+
 		return builder;
 	}
 	

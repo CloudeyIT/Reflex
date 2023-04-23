@@ -12,7 +12,7 @@ namespace Cloudey.Reflex.Core;
 
 public static class LoggingExtensions
 {
-	public static void AddReflexLogging (this WebApplicationBuilder builder)
+	public static WebApplicationBuilder AddReflexLogging (this WebApplicationBuilder builder)
 	{
 		var logLevelConfigured = Enum.TryParse<LogEventLevel>(
 			builder.Configuration.GetSection("Logging").GetValue<string?>("Level"),
@@ -59,5 +59,7 @@ public static class LoggingExtensions
 				}
 			);
 		}
+
+		return builder;
 	}
 }
