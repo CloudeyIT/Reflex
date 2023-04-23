@@ -18,7 +18,7 @@ Install with [NuGet](https://www.nuget.org/packages/Cloudey.Reflex.GraphQL/)
 To get started, create a database context inheriting from the `ReflexDatabaseContext` class, passing in your Identity entities:
 
 ```c#
-public class MainDb : ReflexDatabaseContext<User, Role>
+public class MainDb : ReflexDatabaseContext<User, Role, MainDb>
 {
     public MainDb (DbContextOptions<MainDb> options) : base(options) { }
 }
