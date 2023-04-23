@@ -7,11 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cloudey.Reflex.Database;
 
-public abstract class ReflexDatabaseContext<TUser, TRole> : IdentityDbContext<TUser, TRole, Ulid>
+public abstract class ReflexDatabaseContext<TUser, TRole, TContext> : IdentityDbContext<TUser, TRole, Ulid>
 	where TUser : IdentityUser<Ulid> 
 	where TRole : IdentityRole<Ulid>
+	where TContext : ReflexDatabaseContext<TUser, TRole, TContext>
 {
-	public ReflexDatabaseContext (DbContextOptions<ReflexDatabaseContext<TUser, TRole>> options) : base(options) { }
+	public ReflexDatabaseContext (DbContextOptions<TContext> options) : base(options) { }
 
 	protected new virtual void ConfigureConventions (ModelConfigurationBuilder configurationBuilder)
 	{

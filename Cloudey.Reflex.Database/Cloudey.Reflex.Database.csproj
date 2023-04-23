@@ -6,6 +6,26 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <PackageId>Cloudey.Reflex.Database</PackageId>
+        <Version>1.0.1</Version>
+        <Authors>Kristo Lippur</Authors>
+        <Company>Cloudey IT Ltd.</Company>
+        <SupportUrl>https://cloudey.com</SupportUrl>
+        <WebPage>https://cloudey.com</WebPage>
+        <PackageTags>Cloudey;Reflex;Framework;AspNetCore;Entity Framework Core;EFCore;Database;Postgres</PackageTags>
+        <Description>
+            Provides an opinionated setup for Entity Framework Core using a PostgreSQL database.
+
+            See README for usage instructions.
+        </Description>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/CloudeyIT/Reflex</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+    
     <ItemGroup>
       <ProjectReference Include="..\Cloudey.Reflex.Core\Cloudey.Reflex.Core.csproj" />
     </ItemGroup>
