@@ -140,6 +140,46 @@ public static class PolicyBuilderExtensions
 	}
 
 	/// <summary>
+	/// Require an argument to the given resolver to satisfy an assertion.
+	/// By default, it looks for an argument called "input".
+	/// Must be applied to a resolver method with BEFORE_RESOLVER (recommended) or AFTER_RESOLVER ApplyPolicy,
+	/// e.g. [Guard(typeof(MyPolicy), ApplyPolicy.BEFORE_RESOLVER)]
+	/// </summary>
+	/// <param name="builder"></param>
+	/// <param name="expression"></param>
+	/// <param name="argumentName">Name of the argument to look for ("input")</param>
+	/// <typeparam name="T">Type of the argument</typeparam>
+	/// <returns></returns>
+	public static AuthorizationPolicyBuilder RequireArgumentAssertion<T> (
+		this AuthorizationPolicyBuilder builder,
+		Func<T?, AuthorizationHandlerContext, IMiddlewareContext, bool> expression,
+		string argumentName = "input"
+	)
+		where T : class
+	{
+		return builder.RequireAssertion(
+			context =>
+			{
+				if (context.Resource is not IMiddlewareContext middlewareContext)
+				{
+					throw new ApplicationException(
+						"Invalid target for argument assertion. Must be applied to a query/mutation method and applied with BEFORE_RESOLVER!"
+					);
+				}
+
+				if (middlewareContext.ArgumentValue<T?>(argumentName) is not { } argument)
+				{
+					throw new ApplicationException(
+						"Invalid target for argument assertion. Argument with given name and type not found!"
+					);
+				}
+
+				return expression.Invoke(argument, context, middlewareContext);
+			}
+		);
+	}
+
+	/// <summary>
 	///     Require the parent object to fulfil the given assertion.
 	///     If the policy is applied to a field, the target is the class that contains the field.
 	/// </summary>
@@ -272,6 +312,46 @@ public static class PolicyBuilderExtensions
 							"Invalid target for result assertion requirement. Must be applied to a class or field in a GraphQL context and applied with AFTER_RESOLVER!"
 						);
 				}
+			}
+		);
+	}
+	
+	/// <summary>
+	/// Require an argument to the given resolver to satisfy an assertion.
+	/// By default, it looks for an argument called "input".
+	/// Must be applied to a resolver method with BEFORE_RESOLVER ApplyPolicy,
+	/// e.g. [Guard(typeof(MyPolicy), ApplyPolicy.BEFORE_RESOLVER)]
+	/// </summary>
+	/// <param name="builder"></param>
+	/// <param name="expression"></param>
+	/// <param name="argumentName">Name of the argument to look for ("input")</param>
+	/// <typeparam name="T">Type of the argument</typeparam>
+	/// <returns></returns>
+	public static AuthorizationPolicyBuilder RequireArgumentAssertion<T> (
+		this AuthorizationPolicyBuilder builder,
+		Func<T?, AuthorizationHandlerContext, IMiddlewareContext, Task<bool>> expression,
+		string argumentName = "input"
+	)
+		where T : class
+	{
+		return builder.RequireAssertion(
+			async context =>
+			{
+				if (context.Resource is not IMiddlewareContext middlewareContext)
+				{
+					throw new ApplicationException(
+						"Invalid target for argument assertion. Must be applied to a query/mutation method and applied with BEFORE_RESOLVER!"
+					);
+				}
+
+				if (middlewareContext.ArgumentValue<T?>(argumentName) is not { } argument)
+				{
+					throw new ApplicationException(
+						"Invalid target for argument assertion. Argument with given name and type not found!"
+					);
+				}
+
+				return await expression.Invoke(argument, context, middlewareContext);
 			}
 		);
 	}

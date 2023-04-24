@@ -8,7 +8,7 @@
 
 ### Features  
 
-- Assertions for types, fields, and parent types
+- Assertions for types, fields, parent types, and resolver arguments/input
 - Easy policy-based authorization
 - Works with [Cloudey.Reflex.Authorization](https://www.nuget.org/packages/Cloudey.Reflex.Authorization/)
 
@@ -161,6 +161,49 @@ public class Avatar : Entity {
     [Guard<AvatarPolicy>] // Here, the assertion is applied to the FIELD of type Avatar (the field not the parent!)
     public Avatar AlternativeAvatar { get; set; } // Just an example
 }
+```
+
+#### Argument assertion
+
+RequireArgumentAssertion enables you to assert that an argument to the given resolver (query or mutation method) fulfills a condition. This is useful for authorising based on input objects.
+
+**Important**  
+**Policies with argument assertions should be applied with BEFORE_RESOLVER ApplyPolicy to avoid unintended side effects!**  
+By default, the `Guard` attribute applies an AFTER_RESOLVER policy, which means that the authorisation only runs after the resolver has returned a result. In the case of mutations, this could lead to the action being taken without authorisation.
+Note that this also means the policy cannot contain assertions that work with the resolver result (i.e. RequireParentAssertion, RequireResultAssertion, RequireRelatedAssertion).
+
+Example:  
+```c#
+[QueryType]
+public class HelloWorldQuery
+{
+	
+	// If not using Reflex authorisation: [Authorize("NameOfYourPolicy", ApplyPolicy.BeforeResolver]
+	[Guard<HelloWorldQueryPolicy>(ApplyPolicy.BeforeResolver)]
+	public HelloWorldPayload HelloWorld (HelloWorldInput input)
+	{
+		return new HelloWorldPayload
+			{ Message = $"Hello {input.Name}!" };
+	}
+
+	public record HelloWorldInput(string Name);
+
+	public record HelloWorldPayload
+	{
+		public string Message { get; init; } = string.Empty;
+	}
+
+    // Defining policies in this way requires using the Cloudey.Reflex.Authorization package!
+	public class HelloWorldQueryPolicy : IPolicy
+	{
+		public static AuthorizationPolicy Policy { get; } = new AuthorizationPolicyBuilder()
+			.RequireAuthenticatedUser()
+			// Only John is authorised to receive greetings in this application
+			.RequireArgumentAssertion<HelloWorldInput>(
+				(input, context, middlewareContext) => input?.Name == "John"
+			)
+			.Build();
+	}
 ```
 
 ### Authorization in general

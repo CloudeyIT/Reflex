@@ -40,7 +40,7 @@ public class Guard : AuthorizeAttribute
 	public Guard (string[] roles)
 	{
 		Roles = roles;
-		Apply = ApplyPolicy.Validation;
+		Apply = ApplyPolicy.BeforeResolver;
 	}
 }
 
