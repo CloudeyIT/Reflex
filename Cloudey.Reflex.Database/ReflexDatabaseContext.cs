@@ -1,5 +1,6 @@
 ﻿using Cloudey.Reflex.Core.Setup;
 using Cloudey.Reflex.Database.ValueConverters;
+using Cloudey.Reflex.Database.ValueGenerators;
 using EntityFrameworkCore.Triggers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -25,6 +26,18 @@ public abstract class ReflexDatabaseContext<TUser, TRole, TContext> : IdentityDb
 	protected override void OnModelCreating (ModelBuilder builder)
 	{
 		base.OnModelCreating(builder);
+
+		builder.Entity<TUser>()
+			.Property(u => u.Id)
+			.ValueGeneratedOnAdd()
+			.HasValueGenerator<UlidValueGenerator>()
+			.HasValueGeneratorFactory<UlidValueGeneratorFactory>();
+		
+		builder.Entity<TRole>()
+			.Property(u => u.Id)
+			.ValueGeneratedOnAdd()
+			.HasValueGenerator<UlidValueGenerator>()
+			.HasValueGeneratorFactory<UlidValueGeneratorFactory>();
 		
 		AppDomain.CurrentDomain.GetIncludedAssemblies()
 			.ForEach(assembly => builder.ApplyConfigurationsFromAssembly(assembly));
