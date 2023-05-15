@@ -12,21 +12,6 @@ public abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T> where
 			.ValueGeneratedOnAdd()
 			.HasValueGenerator<UlidValueGenerator>()
 			.HasValueGeneratorFactory<UlidValueGeneratorFactory>();
-		
-		builder.Property(e => e.Revision)
-			.ValueGeneratedOnAddOrUpdate()
-			.HasValueGenerator<UlidValueGenerator>()
-			.HasValueGeneratorFactory<UlidValueGeneratorFactory>();;
-		
-		builder.Property(e => e.Created)
-			.ValueGeneratedOnAdd()
-			.HasValueGenerator<CurrentDateTimeValueGenerator>()
-			.HasValueGeneratorFactory<CurrentDateTimeValueGeneratorFactory>();
-		
-		builder.Property(e => e.Updated)
-			.ValueGeneratedOnUpdate()
-			.HasValueGenerator<CurrentDateTimeValueGenerator>()
-			.HasValueGeneratorFactory<CurrentDateTimeValueGeneratorFactory>();
 
 		builder.Ignore(e => e.Guid);
 	}
