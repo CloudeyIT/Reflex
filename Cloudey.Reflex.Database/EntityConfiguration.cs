@@ -10,19 +10,23 @@ public abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T> where
 	{
 		builder.Property(e => e.Id)
 			.ValueGeneratedOnAdd()
-			.HasValueGenerator<UlidValueGenerator>();
+			.HasValueGenerator<UlidValueGenerator>()
+			.HasValueGeneratorFactory<UlidValueGeneratorFactory>();
 		
 		builder.Property(e => e.Revision)
 			.ValueGeneratedOnAddOrUpdate()
-			.HasValueGenerator<UlidValueGenerator>();
+			.HasValueGenerator<UlidValueGenerator>()
+			.HasValueGeneratorFactory<UlidValueGeneratorFactory>();;
 		
 		builder.Property(e => e.Created)
 			.ValueGeneratedOnAdd()
-			.HasValueGenerator<CurrentDateTimeValueGenerator>();
+			.HasValueGenerator<CurrentDateTimeValueGenerator>()
+			.HasValueGeneratorFactory<CurrentDateTimeValueGeneratorFactory>();
 		
 		builder.Property(e => e.Updated)
 			.ValueGeneratedOnUpdate()
-			.HasValueGenerator<CurrentDateTimeValueGenerator>();
+			.HasValueGenerator<CurrentDateTimeValueGenerator>()
+			.HasValueGeneratorFactory<CurrentDateTimeValueGeneratorFactory>();
 
 		builder.Ignore(e => e.Guid);
 	}
