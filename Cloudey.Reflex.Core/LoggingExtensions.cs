@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Sentry.Extensibility;
-using Sentry.Serilog;
 using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
@@ -25,7 +24,7 @@ public static class LoggingExtensions
 			if (builder.Environment.EnvironmentName == "Cli") logLevel = LogEventLevel.Warning;
 		}
 
-		var sentryConfig = builder.Configuration.GetSection("Sentry").Get<SentrySerilogOptions>();
+		var sentryConfig = builder.Configuration.GetSection("Sentry");
 
 		builder.Host.UseSerilog(
 			(_, configuration) => configuration
@@ -38,10 +37,10 @@ public static class LoggingExtensions
 				.WriteTo.Sentry(
 					sentry =>
 					{
-						if (sentryConfig?.Dsn is null) return;
+						if (sentryConfig.GetValue<string>("Dsn") is null) return;
 
-						sentry.Dsn = sentryConfig.Dsn;
-						sentry.TracesSampleRate = sentryConfig.TracesSampleRate;
+						sentry.Dsn = sentryConfig.GetValue<string>("Dsn");
+						sentry.TracesSampleRate = sentryConfig.GetValue<double>("TracesSampleRate");
 						sentry.AttachStacktrace = true;
 						sentry.InitializeSdk = true;
 						sentry.AutoSessionTracking = true;
@@ -49,7 +48,7 @@ public static class LoggingExtensions
 				)
 		);
 
-		if (sentryConfig?.Dsn is not null)
+		if (sentryConfig.GetValue<string>("Dsn") is not null)
 		{
 			builder.WebHost.UseSentry(
 				(_, sentry) =>
