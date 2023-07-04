@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <PropertyGroup>
         <PackageId>Cloudey.Reflex.Database</PackageId>
-        <Version>1.0.5</Version>
+        <Version>1.1.0-preview.1</Version>
         <Authors>Kristo Lippur</Authors>
         <Company>Cloudey IT Ltd.</Company>
         <SupportUrl>https://cloudey.com</SupportUrl>
@@ -33,9 +33,9 @@
     <ItemGroup>
       <PackageReference Include="Autofac" Version="7.*" />
       <PackageReference Include="EntityFrameworkCore.Triggers" Version="1.*" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.*" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.*" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.*" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0-preview.5.23302.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0-preview.5.23280.1" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.4" />
       <PackageReference Include="Ulid" Version="1.*" />
     </ItemGroup>
 
