@@ -5,12 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Cloudey.Reflex.Core.Routing;
 
-public class SlugifyParameterTransformer : IOutboundParameterTransformer
+public partial class SlugifyParameterTransformer : IOutboundParameterTransformer
 {
 	public string? TransformOutbound (object? value)
 	{
-		return value == null ? null : Regex.Replace(value!.ToString()!, "([a-z])([A-Z])", "$1-$2").ToLower();
+		return value?.ToString() is null ? null : WordsRegex().Replace(value.ToString()!, "$1-$2").ToLower();
 	}
+
+    [GeneratedRegex("([a-z])([A-Z])")]
+    private static partial Regex WordsRegex();
 }
 
 public static class SlugifyExtensions
