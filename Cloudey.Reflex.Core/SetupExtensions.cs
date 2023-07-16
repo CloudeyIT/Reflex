@@ -6,6 +6,7 @@ using Cloudey.Reflex.Core.Setup;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Opw.HttpExceptions.AspNetCore;
@@ -32,7 +33,24 @@ public static class SetupExtensions
 
 	public static WebApplicationBuilder AddReflexHttp (this WebApplicationBuilder builder)
 	{
-		builder.Services.AddCors();
+		builder.Services.AddCors(
+			options => options.AddDefaultPolicy(
+				policy =>
+				{
+					var origins = builder.Configuration.GetValue<string[]>("AllowedOrigins");
+
+					if (origins is not null and not { Length: 0 })
+						policy
+							.WithOrigins(origins)
+							.AllowCredentials();
+					else
+						policy.AllowAnyOrigin();
+
+					policy.AllowAnyMethod()
+						.SetIsOriginAllowedToAllowWildcardSubdomains();
+				}
+			)
+		);
 		builder.Services.AddHttpContextAccessor();
 		builder.Services.AddControllers();
 		builder.Services
