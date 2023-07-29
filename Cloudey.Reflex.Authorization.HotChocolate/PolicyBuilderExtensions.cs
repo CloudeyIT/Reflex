@@ -52,8 +52,7 @@ public static class PolicyBuilderExtensions
 	public static AuthorizationPolicyBuilder RequireTargetAssertion<T> (
 		this AuthorizationPolicyBuilder builder,
 		Func<T?, AuthorizationHandlerContext, IMiddlewareContext, bool> expression
-	) where T : class
-
+	)
 	{
 		return builder.RequireAssertion(
 			context =>
@@ -71,7 +70,7 @@ public static class PolicyBuilderExtensions
 								x => expression.Invoke(x, context, middlewareContext)
 							),
 							Error => true,
-							null => expression.Invoke(null, context, middlewareContext),
+							null => expression.Invoke(default, context, middlewareContext),
 							_ => throw new ApplicationException(
 								"Invalid result type for result assertion requirement. Must be the same as the type of the target!"
 							),
@@ -101,8 +100,7 @@ public static class PolicyBuilderExtensions
 	public static AuthorizationPolicyBuilder RequireRelatedAssertion<T> (
 		this AuthorizationPolicyBuilder builder,
 		Func<T?, AuthorizationHandlerContext, IMiddlewareContext, bool> expression
-	) where T : class
-
+	)
 	{
 		return builder.RequireAssertion(
 			context =>
@@ -120,7 +118,7 @@ public static class PolicyBuilderExtensions
 								x => expression.Invoke(x, context, middlewareContext)
 							),
 							Error => true,
-							null => expression.Invoke(null, context, middlewareContext),
+							null => expression.Invoke(default, context, middlewareContext),
 							_ => middlewareContext.Parent<object?>() switch
 							{
 								T parent => expression.Invoke(parent, context, middlewareContext),
@@ -155,7 +153,6 @@ public static class PolicyBuilderExtensions
 		Func<T?, AuthorizationHandlerContext, IMiddlewareContext, bool> expression,
 		string argumentName = "input"
 	)
-		where T : class
 	{
 		return builder.RequireAssertion(
 			context =>
@@ -225,8 +222,7 @@ public static class PolicyBuilderExtensions
 	public static AuthorizationPolicyBuilder RequireTargetAssertion<T> (
 		this AuthorizationPolicyBuilder builder,
 		Func<T?, AuthorizationHandlerContext, IMiddlewareContext, Task<bool>> expression
-	) where T : class
-
+	)
 	{
 		return builder.RequireAssertion(
 			async context =>
@@ -246,7 +242,7 @@ public static class PolicyBuilderExtensions
 								)
 							)).All(x => x),
 							Error => true,
-							null => await expression.Invoke(null, context, middlewareContext),
+							null => await expression.Invoke(default, context, middlewareContext),
 							_ => throw new ApplicationException(
 								"Invalid result type for result assertion requirement. Must be the same as the type of the target!"
 							),
@@ -276,8 +272,7 @@ public static class PolicyBuilderExtensions
 	public static AuthorizationPolicyBuilder RequireRelatedAssertion<T> (
 		this AuthorizationPolicyBuilder builder,
 		Func<T?, AuthorizationHandlerContext, IMiddlewareContext, Task<bool>> expression
-	) where T : class
-
+	)
 	{
 		return builder.RequireAssertion(
 			async context =>
@@ -297,7 +292,7 @@ public static class PolicyBuilderExtensions
 								)
 							)).All(x => x),
 							Error => true,
-							null => await expression.Invoke(null, context, middlewareContext),
+							null => await expression.Invoke(default, context, middlewareContext),
 							_ => middlewareContext.Parent<object?>() switch
 							{
 								T parent => await expression.Invoke(parent, context, middlewareContext),
@@ -332,7 +327,6 @@ public static class PolicyBuilderExtensions
 		Func<T?, AuthorizationHandlerContext, IMiddlewareContext, Task<bool>> expression,
 		string argumentName = "input"
 	)
-		where T : class
 	{
 		return builder.RequireAssertion(
 			async context =>
