@@ -8,7 +8,7 @@
 
     <PropertyGroup>
         <PackageId>Cloudey.Reflex.Database</PackageId>
-        <Version>1.0.5</Version>
+        <Version>1.0.6</Version>
         <Authors>Kristo Lippur</Authors>
         <Company>Cloudey IT Ltd.</Company>
         <SupportUrl>https://cloudey.com</SupportUrl>
@@ -31,12 +31,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="7.*" />
-      <PackageReference Include="EntityFrameworkCore.Triggers" Version="1.*" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.*" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.*" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.*" />
-      <PackageReference Include="Ulid" Version="1.*" />
+      <PackageReference Include="Autofac" Version="7.0.0" />
+      <PackageReference Include="EntityFrameworkCore.Triggers" Version="1.0.5" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.0" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0" />
+      <PackageReference Include="Ulid" Version="1.2.6" />
     </ItemGroup>
 
     <ItemGroup>

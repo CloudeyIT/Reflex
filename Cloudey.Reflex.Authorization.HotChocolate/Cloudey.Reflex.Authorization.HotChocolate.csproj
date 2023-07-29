@@ -8,7 +8,7 @@
 
     <PropertyGroup>
         <PackageId>Cloudey.Reflex.Authorization.HotChocolate</PackageId>
-        <Version>1.1.1</Version>
+        <Version>1.1.2</Version>
         <Authors>Kristo Lippur</Authors>
         <Company>Cloudey IT Ltd.</Company>
         <SupportUrl>https://cloudey.com</SupportUrl>
@@ -30,10 +30,10 @@
     </PropertyGroup>
     
     <ItemGroup>
-      <PackageReference Include="Cloudey.Reflex.Authorization" Version="1.*" />
-      <PackageReference Include="HotChocolate.Authorization" Version="13.*" />
-      <PackageReference Include="HotChocolate.Types" Version="13.*" />
-      <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.*" />
+      <PackageReference Include="Cloudey.Reflex.Authorization" Version="1.0.0" />
+      <PackageReference Include="HotChocolate.Authorization" Version="13.2.0" />
+      <PackageReference Include="HotChocolate.Types" Version="13.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>

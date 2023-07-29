@@ -8,7 +8,7 @@
 
     <PropertyGroup>
         <PackageId>Cloudey.Reflex.GraphQL</PackageId>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <Authors>Kristo Lippur</Authors>
         <Company>Cloudey IT Ltd.</Company>
         <SupportUrl>https://cloudey.com</SupportUrl>
@@ -27,13 +27,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FairyBread" Version="10.*" />
-      <PackageReference Include="HotChocolate.AspNetCore" Version="13.*" />
-      <PackageReference Include="HotChocolate.Caching" Version="13.*" />
-      <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.*" />
-      <PackageReference Include="HotChocolate.Execution" Version="13.*" />
-      <PackageReference Include="HotChocolate.PersistedQueries.InMemory" Version="13.*" />
-      <PackageReference Include="Ulid" Version="1.*" />
+      <PackageReference Include="FairyBread" Version="10.0.0" />
+      <PackageReference Include="HotChocolate.AspNetCore" Version="13.2.0" />
+      <PackageReference Include="HotChocolate.Caching" Version="13.2.0" />
+      <PackageReference Include="HotChocolate.Data.EntityFramework" Version="13.2.0" />
+      <PackageReference Include="HotChocolate.Execution" Version="13.2.0" />
+      <PackageReference Include="HotChocolate.PersistedQueries.InMemory" Version="13.2.0" />
+      <PackageReference Include="Ulid" Version="1.2.6" />
     </ItemGroup>
 
     <ItemGroup>
