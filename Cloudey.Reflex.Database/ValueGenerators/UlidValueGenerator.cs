@@ -8,16 +8,10 @@ public class UlidValueGenerator : ValueGenerator<Ulid>
 {
 	public override bool GeneratesTemporaryValues => false;
 
-	public override Ulid Next (EntityEntry entry)
-	{
-		return Ulid.NewUlid();
-	}
+	public override Ulid Next (EntityEntry entry) => Ulid.NewUlid();
 }
 
 public class UlidValueGeneratorFactory : ValueGeneratorFactory
 {
-	public override ValueGenerator Create (IProperty property, IEntityType entityType)
-	{
-		return new UlidValueGenerator();
-	}
+	public override ValueGenerator Create (IProperty property, ITypeBase typeBase) => new UlidValueGenerator();
 }

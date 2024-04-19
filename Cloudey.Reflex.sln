@@ -1,14 +1,14 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudey.Reflex.Authorization", "Cloudey.Reflex.Authorization\Cloudey.Reflex.Authorization.csproj", "{1FDBB6D0-AE32-4F70-AD39-32055017CA37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudey.Reflex.Authorization", "Cloudey.Reflex.Authorization\Cloudey.Reflex.Authorization.csproj", "{1FDBB6D0-AE32-4F70-AD39-32055017CA37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudey.Reflex.Authorization.HotChocolate", "Cloudey.Reflex.Authorization.HotChocolate\Cloudey.Reflex.Authorization.HotChocolate.csproj", "{D4B44E49-593D-49FC-B7D3-039207113F61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudey.Reflex.Authorization.HotChocolate", "Cloudey.Reflex.Authorization.HotChocolate\Cloudey.Reflex.Authorization.HotChocolate.csproj", "{D4B44E49-593D-49FC-B7D3-039207113F61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudey.Reflex.Core", "Cloudey.Reflex.Core\Cloudey.Reflex.Core.csproj", "{E2DE9F96-5188-4927-A68A-92B052378386}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudey.Reflex.Core", "Cloudey.Reflex.Core\Cloudey.Reflex.Core.csproj", "{E2DE9F96-5188-4927-A68A-92B052378386}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudey.Reflex.Database", "Cloudey.Reflex.Database\Cloudey.Reflex.Database.csproj", "{6C6A71E8-CEC3-4272-A41D-F298A9370766}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudey.Reflex.Database", "Cloudey.Reflex.Database\Cloudey.Reflex.Database.csproj", "{6C6A71E8-CEC3-4272-A41D-F298A9370766}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloudey.Reflex.GraphQL", "Cloudey.Reflex.GraphQL\Cloudey.Reflex.GraphQL.csproj", "{F96C009B-7C2D-4CD3-8A1C-45E59692A3E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cloudey.Reflex.GraphQL", "Cloudey.Reflex.GraphQL\Cloudey.Reflex.GraphQL.csproj", "{F96C009B-7C2D-4CD3-8A1C-45E59692A3E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

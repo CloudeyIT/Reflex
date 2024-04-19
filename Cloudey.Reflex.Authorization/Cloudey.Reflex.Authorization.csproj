@@ -1,41 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <PackageId>Cloudey.Reflex.Authorization</PackageId>
-        <Version>1.0.1</Version>
-        <Authors>Kristo Lippur</Authors>
-        <Company>Cloudey IT Ltd.</Company>
-        <SupportUrl>https://cloudey.com</SupportUrl>
-        <WebPage>https://cloudey.com</WebPage>
-        <PackageTags>Cloudey;Reflex;Authorization;Policy;Autofac;Policies;Security</PackageTags>
-        <Description>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>Cloudey.Reflex.Authorization</PackageId>
+    <Version>2.0.0</Version>
+    <Authors>Kristo Lippur</Authors>
+    <Company>Cloudey IT Ltd.</Company>
+    <SupportUrl>https://cloudey.com</SupportUrl>
+    <WebPage>https://cloudey.com</WebPage>
+    <PackageTags>Cloudey;Reflex;Authorization;Policy;Autofac;Policies;Security</PackageTags>
+    <Description>
 Plug-and-play authorization library for projects using Autofac and ASP.NET Core.
 - Easily define and use authorization policies, with auto-discovery
 - Policies and authorization handles are automatically registered and resolved from Autofac
 
 See README for usage instructions.
         </Description>
-        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <RepositoryUrl>https://github.com/CloudeyIT/Reflex</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Autofac" Version="7.0.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
-        <None Include="LICENSE" Pack="true" PackagePath="\"/>
-    </ItemGroup>
-
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/CloudeyIT/Reflex</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
 </Project>
