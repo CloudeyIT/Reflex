@@ -8,9 +8,9 @@ public class AuthorizationHandlerProvider : IAuthorizationHandlerProvider
 {
     private readonly IServiceScope _scope;
 
-    public AuthorizationHandlerProvider (IServiceScope scope)
+    public AuthorizationHandlerProvider (IServiceProvider services)
     {
-        _scope = scope;
+        _scope = services.CreateScope();
     }
 
     public Task<IEnumerable<IAuthorizationHandler>> GetHandlersAsync (AuthorizationHandlerContext context)

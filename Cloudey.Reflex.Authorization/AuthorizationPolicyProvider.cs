@@ -9,9 +9,9 @@ public class AuthorizationPolicyProvider : IAuthorizationPolicyProvider
     private readonly IOptions<AuthorizationOptions> _options;
     private readonly IServiceScope _scope;
 
-    public AuthorizationPolicyProvider (IServiceScope scope, IOptions<AuthorizationOptions> options)
+    public AuthorizationPolicyProvider (IServiceProvider services, IOptions<AuthorizationOptions> options)
     {
-        _scope = scope;
+        _scope = services.CreateScope();
         _options = options;
     }
 
