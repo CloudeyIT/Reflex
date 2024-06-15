@@ -4,7 +4,7 @@ namespace Cloudey.Reflex.Authorization.HotChocolate;
 
 public class GuardAttribute<T> : AuthorizeAttribute where T : IPolicy
 {
-	public GuardAttribute () : base(typeof(T).FullName!) { }
+	public GuardAttribute () : base(typeof(T).FullName!, ApplyPolicy.AfterResolver) { }
 
 	public GuardAttribute (ApplyPolicy apply = ApplyPolicy.AfterResolver) : base(typeof(T).FullName!, apply) { }
 }
