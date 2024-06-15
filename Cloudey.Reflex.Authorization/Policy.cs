@@ -4,5 +4,5 @@ namespace Cloudey.Reflex.Authorization;
 
 public interface IPolicy
 {
-	public static abstract AuthorizationPolicy Policy { get; }
+    public static abstract AuthorizationPolicy Policy { get; }
 }

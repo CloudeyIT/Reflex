@@ -58,7 +58,7 @@ public class SecretKeyPolicy : IPolicy
 
 public class User : Entity {
     // ...
-    [Guard<SecretKeyPolicy>]
+    [Authorize<SecretKeyPolicy>]
     public string SecretKey { get; set; }
 }
 ```
@@ -84,7 +84,7 @@ Example:
 // IMPORTANT: Defining policies in this way requires setting up Cloudey.Reflex.Authorization
 public class AvatarPolicy : IPolicy
 {
-    public static AuthorizationPolicy Policy { get; } = new AuthorizationPolicyBuilder()
+    public static AuthorizationPolicy Policy => new AuthorizationPolicyBuilder()
         .RequireTargetAssertion<Avatar>(
         // The avatar can only be accessed if it is set as public
             (avatar, context, directiveContext) => avatar.IsPublic
@@ -96,13 +96,13 @@ public class AvatarPolicy : IPolicy
 
 public class User : Entity {
     // ...
-    [Guard<AvatarPolicy>] // Can be applied here to only have an effect when accessed through User
+    [Authorize<AvatarPolicy>] // Can be applied here to only have an effect when accessed through User
     public Avatar? Avatar { get; set; }
 }
 
 // Avatar.cs
 
-[Guard<AvatarPolicy>] // Can also be applied here to always have an effect whenever Avatar is resolved, incl. through other types
+[Authorize<AvatarPolicy>] // Can also be applied here to always have an effect whenever Avatar is resolved, incl. through other types
 public class Avatar : Entity {
     // ...
     public bool IsPublic { get; set; } 
@@ -134,7 +134,7 @@ Example:
 // IMPORTANT: Defining policies in this way requires setting up Cloudey.Reflex.Authorization
 public class AvatarPolicy : IPolicy
 {
-    public static AuthorizationPolicy Policy { get; } = new AuthorizationPolicyBuilder()
+    public static AuthorizationPolicy Policy => new AuthorizationPolicyBuilder()
         .RequireRelatedAssertion<Avatar>(
         // The avatar can only be accessed if it is set as public
             (avatar, context, directiveContext) => avatar.IsPublic
@@ -146,19 +146,19 @@ public class AvatarPolicy : IPolicy
 
 public class User : Entity {
     // ...
-    [Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar
+    [Authorize<AvatarPolicy>] // Here, the assertion is applied to Avatar
     public Avatar? Avatar { get; set; }
 }
 
 // Avatar.cs
 
-[Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar
+[Authorize<AvatarPolicy>] // Here, the assertion is applied to Avatar
 public class Avatar : Entity {
     // ...
-    [Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar (the parent)
+    [Authorize<AvatarPolicy>] // Here, the assertion is applied to Avatar (the parent)
     public bool IsPublic { get; set; } 
     
-    [Guard<AvatarPolicy>] // Here, the assertion is applied to the FIELD of type Avatar (the field not the parent!)
+    [Authorize<AvatarPolicy>] // Here, the assertion is applied to the FIELD of type Avatar (the field not the parent!)
     public Avatar AlternativeAvatar { get; set; } // Just an example
 }
 ```
@@ -169,7 +169,7 @@ RequireArgumentAssertion enables you to assert that an argument to the given res
 
 **Important**  
 **Policies with argument assertions should be applied with BEFORE_RESOLVER ApplyPolicy to avoid unintended side effects!**  
-By default, the `Guard` attribute applies an AFTER_RESOLVER policy, which means that the authorisation only runs after the resolver has returned a result. In the case of mutations, this could lead to the action being taken without authorisation.
+By default, the `Authorize<T>` attribute from this library applies an AFTER_RESOLVER policy, which means that the authorisation only runs after the resolver has returned a result. In the case of mutations, this could lead to the action being taken without authorisation.
 Note that this also means the policy cannot contain assertions that work with the resolver result (i.e. RequireParentAssertion, RequireResultAssertion, RequireRelatedAssertion).
 
 Example:  
@@ -179,7 +179,7 @@ public class HelloWorldQuery
 {
 	
 	// If not using Reflex authorisation: [Authorize("NameOfYourPolicy", ApplyPolicy.BeforeResolver]
-	[Guard<HelloWorldQueryPolicy>(ApplyPolicy.BeforeResolver)]
+	[Authorize<HelloWorldQueryPolicy>(ApplyPolicy.BeforeResolver)]
 	public HelloWorldPayload HelloWorld (HelloWorldInput input)
 	{
 		return new HelloWorldPayload
@@ -196,7 +196,7 @@ public class HelloWorldQuery
     // Defining policies in this way requires using the Cloudey.Reflex.Authorization package!
 	public class HelloWorldQueryPolicy : IPolicy
 	{
-		public static AuthorizationPolicy Policy { get; } = new AuthorizationPolicyBuilder()
+		public static AuthorizationPolicy Policy => new AuthorizationPolicyBuilder()
 			.RequireAuthenticatedUser()
 			// Only John is authorised to receive greetings in this application
 			.RequireArgumentAssertion<HelloWorldInput>(
@@ -208,16 +208,16 @@ public class HelloWorldQuery
 
 ### Authorization in general
 
-To authenticate a given request, entity, or property, use the `[Guard]` attribute. The Guard attribute can be used to authenticate based on roles or a policy, and replaces the `Authorize` attribute from HotChocolate.
+To authenticate a given request, entity, or property, use the `[Authorize<T>]` attribute. The Authorize attribute can be used to authenticate based on roles or a policy, and replaces the `Authorize` attribute from HotChocolate.
 
 ### Authorizing a query or mutation
 
-Apply the `[Guard]` attribute to the query or mutation **method**, eg:
+Apply the `[Authorize<T>]` attribute to the query or mutation **method**, eg:
 ```c#
 [QueryType]
 public class MyQuery {
     ...
-    [Guard(new[] { "Admin" })] // Only users with the "Admin" role can access this query
+    [Authorize(new[] { "Admin" })] // Only users with the "Admin" role can access this query
     public async string GetHello () {
         return "Hello";
     }
@@ -226,9 +226,9 @@ public class MyQuery {
 
 ### Authorizing an entity
 
-Apply the `[Guard]` attribute to the entity class, eg:
+Apply the `[Authorize]` attribute to the entity class, eg:
 ```c#
-[Guard(new[] { "Admin" })]
+[Authorize(new[] { "Admin" })]
 public class SecretInformation : Entity {
     ...
 }
@@ -237,12 +237,12 @@ This prevents anyone without the `Admin` role from accessing the entity in any q
 
 ### Authorizing a property
 
-You can also restrict access on a field-level. Apply the `[Guard]` attribute to the field, eg:
+You can also restrict access on a field-level. Apply the `[Authorize]` attribute to the field, eg:
 ```c#
 public class User : Entity {
     public Guid Id {get; set;}
 
-    [Guard(new[] { "Admin" })]
+    [Authorize(new[] { "Admin" })]
     public string PasswordHash {get; set;}
 }
 ```
@@ -250,7 +250,7 @@ This disallows access to the PasswordHash fields for everyone except Admins.
 
 ### Combining the authorization attributes
 
-You can apply authorization attributes on multiple `levels`, and they will all be executed in order. E.g. you can allow access to the Role entity to all authenticated users with a `[Guard]` attribute on the Role class, but only allow access for Admins to a specific field in that entity by adding `[Guard(new[] { "Admin" })]` to that field.
+You can apply authorization attributes on multiple `levels`, and they will all be executed in order. E.g. you can allow access to the Role entity to all authenticated users with a `[Authorize]` attribute on the Role class, but only allow access for Admins to a specific field in that entity by adding `[Authorize(new[] { "Admin" })]` to that field.
 
 ### Using policies
 
@@ -259,5 +259,5 @@ When simple role-based authentication is not enough, you can also use policies t
 ### License
 
 Licensed under Apache 2.0.  
-**Copyright © 2023 Cloudey IT Ltd**  
+**Copyright © 2024 Cloudey IT Ltd**  
 Cloudey® is a registered trademark of Cloudey IT Ltd. Use of the trademark is NOT GRANTED under the license of this repository or software package.
