@@ -58,7 +58,7 @@ public class SecretKeyPolicy : IPolicy
 
 public class User : Entity {
     // ...
-    [Authorize<SecretKeyPolicy>]
+    [Guard<SecretKeyPolicy>]
     public string SecretKey { get; set; }
 }
 ```
@@ -96,13 +96,13 @@ public class AvatarPolicy : IPolicy
 
 public class User : Entity {
     // ...
-    [Authorize<AvatarPolicy>] // Can be applied here to only have an effect when accessed through User
+    [Guard<AvatarPolicy>] // Can be applied here to only have an effect when accessed through User
     public Avatar? Avatar { get; set; }
 }
 
 // Avatar.cs
 
-[Authorize<AvatarPolicy>] // Can also be applied here to always have an effect whenever Avatar is resolved, incl. through other types
+[Guard<AvatarPolicy>] // Can also be applied here to always have an effect whenever Avatar is resolved, incl. through other types
 public class Avatar : Entity {
     // ...
     public bool IsPublic { get; set; } 
@@ -146,19 +146,19 @@ public class AvatarPolicy : IPolicy
 
 public class User : Entity {
     // ...
-    [Authorize<AvatarPolicy>] // Here, the assertion is applied to Avatar
+    [Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar
     public Avatar? Avatar { get; set; }
 }
 
 // Avatar.cs
 
-[Authorize<AvatarPolicy>] // Here, the assertion is applied to Avatar
+[Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar
 public class Avatar : Entity {
     // ...
-    [Authorize<AvatarPolicy>] // Here, the assertion is applied to Avatar (the parent)
+    [Guard<AvatarPolicy>] // Here, the assertion is applied to Avatar (the parent)
     public bool IsPublic { get; set; } 
     
-    [Authorize<AvatarPolicy>] // Here, the assertion is applied to the FIELD of type Avatar (the field not the parent!)
+    [Guard<AvatarPolicy>] // Here, the assertion is applied to the FIELD of type Avatar (the field not the parent!)
     public Avatar AlternativeAvatar { get; set; } // Just an example
 }
 ```
@@ -178,8 +178,8 @@ Example:
 public class HelloWorldQuery
 {
 	
-	// If not using Reflex authorisation: [Authorize("NameOfYourPolicy", ApplyPolicy.BeforeResolver]
-	[Authorize<HelloWorldQueryPolicy>(ApplyPolicy.BeforeResolver)]
+	// If not using Reflex authorisation: [Guard("NameOfYourPolicy", ApplyPolicy.BeforeResolver]
+	[Guard<HelloWorldQueryPolicy>(ApplyPolicy.BeforeResolver)]
 	public HelloWorldPayload HelloWorld (HelloWorldInput input)
 	{
 		return new HelloWorldPayload
@@ -208,16 +208,16 @@ public class HelloWorldQuery
 
 ### Authorization in general
 
-To authenticate a given request, entity, or property, use the `[Authorize<T>]` attribute. The Authorize attribute can be used to authenticate based on roles or a policy, and replaces the `Authorize` attribute from HotChocolate.
+To authenticate a given request, entity, or property, use the `[Guard<T>]` attribute. The Guard attribute can be used to authenticate based on roles or a policy, and replaces the `Authorize` attribute from HotChocolate.
 
 ### Authorizing a query or mutation
 
-Apply the `[Authorize<T>]` attribute to the query or mutation **method**, eg:
+Apply the `[Guard]` attribute to the query or mutation **method**, eg:
 ```c#
 [QueryType]
 public class MyQuery {
     ...
-    [Authorize(new[] { "Admin" })] // Only users with the "Admin" role can access this query
+    [Guard("Admin")] // Only users with the "Admin" role can access this query
     public async string GetHello () {
         return "Hello";
     }
@@ -226,9 +226,9 @@ public class MyQuery {
 
 ### Authorizing an entity
 
-Apply the `[Authorize]` attribute to the entity class, eg:
+Apply the `[Guard]` attribute to the entity class, eg:
 ```c#
-[Authorize(new[] { "Admin" })]
+[Guard("Admin")]
 public class SecretInformation : Entity {
     ...
 }
@@ -237,12 +237,12 @@ This prevents anyone without the `Admin` role from accessing the entity in any q
 
 ### Authorizing a property
 
-You can also restrict access on a field-level. Apply the `[Authorize]` attribute to the field, eg:
+You can also restrict access on a field-level. Apply the `[Guard]` attribute to the field, eg:
 ```c#
 public class User : Entity {
     public Guid Id {get; set;}
 
-    [Authorize(new[] { "Admin" })]
+    [Guard("Admin")]
     public string PasswordHash {get; set;}
 }
 ```
@@ -250,7 +250,7 @@ This disallows access to the PasswordHash fields for everyone except Admins.
 
 ### Combining the authorization attributes
 
-You can apply authorization attributes on multiple `levels`, and they will all be executed in order. E.g. you can allow access to the Role entity to all authenticated users with a `[Authorize]` attribute on the Role class, but only allow access for Admins to a specific field in that entity by adding `[Authorize(new[] { "Admin" })]` to that field.
+You can apply authorization attributes on multiple `levels`, and they will all be executed in order. E.g. you can allow access to the Role entity to all authenticated users with a `[Guard]` attribute on the Role class, but only allow access for Admins to a specific field in that entity by adding `[Guard(new[] { "Admin" })]` to that field.
 
 ### Using policies
 
