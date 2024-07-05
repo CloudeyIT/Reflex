@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cloudey.Reflex.Authorization;
@@ -18,7 +19,9 @@ public static class DependencyInjectionExtensions
         services.AddAuthorizationCore(configure ?? (_ => { }));
         services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
         services.AddSingleton<IAuthorizationHandlerProvider, AuthorizationHandlerProvider>();
-        services.AddSingleton<IAuthorizationHandler, AssertionRequirementHandler>();
+        services.AddSingleton<AssertionRequirementHandler>();
+        services.AddSingleton<AuthorizationHandler<AssertionRequirement>>(provider => provider.GetRequiredService<AssertionRequirementHandler>());
+        services.AddSingleton<IAuthorizationHandler>(provider => provider.GetRequiredService<AssertionRequirementHandler>());
         services.AddSingleton<IAuthorizationService, AuthorizationService>();
 
         foreach (var assembly in assemblies)
