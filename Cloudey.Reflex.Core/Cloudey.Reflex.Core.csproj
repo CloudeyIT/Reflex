@@ -1,53 +1,53 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PackageId>Cloudey.Reflex.Core</PackageId>
-    <Version>3.0.0</Version>
-    <Authors>Kristo Lippur</Authors>
-    <Company>Cloudey IT Ltd.</Company>
-    <SupportUrl>https://cloudey.com</SupportUrl>
-    <WebPage>https://cloudey.com</WebPage>
-    <PackageTags>Cloudey;Reflex;Framework;Configuration;AspNetCore</PackageTags>
-    <Description>
-            Reflex is an opinionated pluggable application framework for ASP.NET Core. 
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+    <PropertyGroup>
+        <PackageId>Cloudey.Reflex.Core</PackageId>
+        <Version>3.0.0</Version>
+        <Authors>Kristo Lippur</Authors>
+        <Company>Cloudey IT Ltd.</Company>
+        <SupportUrl>https://cloudey.com</SupportUrl>
+        <WebPage>https://cloudey.com</WebPage>
+        <PackageTags>Cloudey;Reflex;Framework;Configuration;AspNetCore</PackageTags>
+        <Description>
+            Reflex is an opinionated pluggable application framework for ASP.NET Core.
             This package contains some core features.
 
             See README for usage instructions.
         </Description>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/CloudeyIT/Reflex</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Autofac" Version="8.2.0" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
-    <PackageReference Include="FluentValidation" Version="11.11.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
-    <PackageReference Include="morelinq" Version="4.3.0" />
-    <PackageReference Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
-    <PackageReference Include="Opw.HttpExceptions.AspNetCore" Version="4.0.3" />
-    <PackageReference Include="Serilog" Version="4.2.0" />
-    <PackageReference Include="Sentry" Version="5.0.0" />
-    <PackageReference Include="Sentry.AspNetCore" Version="5.0.0" />
-    <PackageReference Include="Sentry.Serilog" Version="5.0.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-    <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
-    <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
-    <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0" />
-    <PackageReference Include="Serilog.Extensions.Autofac.DependencyInjection" Version="5.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" />
-    <None Include="LICENSE" Pack="true" PackagePath="\" />
-  </ItemGroup>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/CloudeyIT/Reflex</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Autofac" Version="8.2.0"/>
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0"/>
+        <PackageReference Include="FluentValidation" Version="11.11.0"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0"/>
+        <PackageReference Include="morelinq" Version="4.3.0"/>
+        <PackageReference Include="NetEscapades.Configuration.Yaml" Version="3.1.0"/>
+        <PackageReference Include="Opw.HttpExceptions.AspNetCore" Version="4.0.3"/>
+        <PackageReference Include="Serilog" Version="4.2.0"/>
+        <PackageReference Include="Sentry" Version="5.0.0"/>
+        <PackageReference Include="Sentry.AspNetCore" Version="5.0.0"/>
+        <PackageReference Include="Sentry.Serilog" Version="5.0.0"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="9.0.0"/>
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1"/>
+        <PackageReference Include="Serilog.Exceptions" Version="8.4.0"/>
+        <PackageReference Include="Serilog.Extensions.Autofac.DependencyInjection" Version="5.0.0"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Include="LICENSE" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 </Project>
