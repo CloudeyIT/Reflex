@@ -22,15 +22,19 @@ public static class HotChocolateBuilderExtensions
 				assemblies is not null ? assemblies : AppDomain.CurrentDomain.GetIncludedAssemblies()
 			)
 			.UseExceptions()
-			.AddFairyBread(_ => _.ThrowIfNoValidatorsFound = false)
+			.AddFairyBread(o => o.ThrowIfNoValidatorsFound = false)
 			.AddProjections()
 			.AddFiltering()
 			.AddSorting()
-			.SetPagingOptions(
-				new PagingOptions { IncludeTotalCount = true, MaxPageSize = 100, DefaultPageSize = 20 }
-			)
+            .ModifyPagingOptions(
+                o =>
+                {
+                    o.IncludeTotalCount = true;
+                    o.MaxPageSize = 100;
+                    o.DefaultPageSize = 20;
+                })
 			.AddErrorFilter<LoggingErrorFilter>()
-			.UseAutomaticPersistedQueryPipeline()
+			.UseAutomaticPersistedOperationPipeline()
 			.AddInMemoryQueryStorage()
 			.AddDefaultTransactionScopeHandler()
 			.AddMutationConventions(
@@ -47,8 +51,8 @@ public static class HotChocolateBuilderExtensions
 			)
 			.AddErrorInterfaceType<IError>()
 			.AddTypeConverter<UlidTypeProvider>()
-			.BindRuntimeType(typeof(Ulid), typeof(StringType))
-			.InitializeOnStartup();
+			.BindRuntimeType<Ulid, StringType>()
+            .InitializeOnStartup();
 
 		builder.Services.AddSingleton(builder);
 		builder.Services.RemoveAll<IHttpResponseFormatter>();

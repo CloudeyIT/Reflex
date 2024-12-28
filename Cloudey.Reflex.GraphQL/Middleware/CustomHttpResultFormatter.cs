@@ -7,7 +7,7 @@ namespace Cloudey.Reflex.GraphQL.Middleware;
 public class CustomHttpResultFormatter : DefaultHttpResponseFormatter
 {
 	protected override HttpStatusCode OnDetermineStatusCode (
-		IQueryResult result,
+		IOperationResult result,
 		FormatInfo format,
 		HttpStatusCode? proposedStatusCode
 	)
