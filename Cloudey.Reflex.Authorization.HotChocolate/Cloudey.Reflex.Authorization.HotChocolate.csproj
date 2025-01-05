@@ -7,7 +7,7 @@
     </PropertyGroup>
     <PropertyGroup>
         <PackageId>Cloudey.Reflex.Authorization.HotChocolate</PackageId>
-        <Version>4.0.1</Version>
+        <Version>4.0.5</Version>
         <Authors>Kristo Lippur</Authors>
         <Company>Cloudey IT Ltd.</Company>
         <SupportUrl>https://cloudey.com</SupportUrl>

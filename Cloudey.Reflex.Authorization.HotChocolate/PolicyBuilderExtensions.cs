@@ -63,13 +63,20 @@ public static class PolicyBuilderExtensions
                     case IMiddlewareContext middlewareContext:
                     {
                         var result = middlewareContext.Result;
-                        
-                        if (result?.GetType().IsAssignableTo(typeof(IReadOnlyList<T>)) == true)
+
+                        try
                         {
                             // Hot Chocolate 14 changed the type of paged items to a private sealed class (CollectionWrapper),
-                            // which makes it impossible to properly match in the switch case below.
-                            // This cast ensures we can match on the result type.
-                            result = (IEnumerable<T>)result;
+                            // which makes it impossible to match in the switch case below.
+                            // This check ensures we can match on the actual result.
+                            if (middlewareContext.Parent<CollectionSegment<T>>() is { } pagedResult)
+                            {
+                                result = pagedResult;
+                            }
+                        }
+                        catch
+                        {
+                            // Nothing
                         }
 
                         return result switch
@@ -90,7 +97,7 @@ public static class PolicyBuilderExtensions
                                 "Invalid result type for result assertion requirement. Must be the same as the type of the target!"
                             ),
                         };
-                    }
+                }
                     default:
                         throw new ApplicationException(
                             "Invalid target for result assertion requirement. Must be applied to a class or field in a GraphQL context and applied with AFTER_RESOLVER!"
@@ -126,14 +133,21 @@ public static class PolicyBuilderExtensions
                     {
                         var result = middlewareContext.Result;
 
-                        if (result?.GetType().IsAssignableTo(typeof(IReadOnlyList<T>)) == true)
+                        try
                         {
                             // Hot Chocolate 14 changed the type of paged items to a private sealed class (CollectionWrapper),
-                            // which makes it impossible to properly match in the switch case below.
-                            // This cast ensures we can match on the result type.
-                            result = (IEnumerable<T>)result;
+                            // which makes it impossible to match in the switch case below.
+                            // This check ensures we can match on the actual result.
+                            if (middlewareContext.Parent<CollectionSegment<T>>() is { } pagedResult)
+                            {
+                                result = pagedResult;
+                            }
                         }
-
+                        catch
+                        {
+                            // Nothing
+                        }
+                        
                         return result switch
                         {
                             T singleResult => expression.Invoke(singleResult, context, middlewareContext),
@@ -257,13 +271,20 @@ public static class PolicyBuilderExtensions
                     case IMiddlewareContext middlewareContext:
                     {
                         var result = middlewareContext.Result;
-                        
-                        if (result?.GetType().IsAssignableTo(typeof(IReadOnlyList<T>)) == true)
+
+                        try
                         {
                             // Hot Chocolate 14 changed the type of paged items to a private sealed class (CollectionWrapper),
-                            // which makes it impossible to properly match in the switch case below.
-                            // This cast ensures we can match on the result type.
-                            result = (IEnumerable<T>)result;
+                            // which makes it impossible to match in the switch case below.
+                            // This check ensures we can match on the actual result.
+                            if (middlewareContext.Parent<CollectionSegment<T>>() is { } pagedResult)
+                            {
+                                result = pagedResult;
+                            }
+                        }
+                        catch
+                        {
+                            // Nothing
                         }
 
                         return result switch
@@ -325,13 +346,20 @@ public static class PolicyBuilderExtensions
                     case IMiddlewareContext middlewareContext:
                     {
                         var result = middlewareContext.Result;
-                        
-                        if (result?.GetType().IsAssignableTo(typeof(IReadOnlyList<T>)) == true)
+
+                        try
                         {
                             // Hot Chocolate 14 changed the type of paged items to a private sealed class (CollectionWrapper),
-                            // which makes it impossible to properly match in the switch case below.
-                            // This cast ensures we can match on the result type.
-                            result = (IEnumerable<T>)result;
+                            // which makes it impossible to match in the switch case below.
+                            // This check ensures we can match on the actual result.
+                            if (middlewareContext.Parent<CollectionSegment<T>>() is { } pagedResult)
+                            {
+                                result = pagedResult;
+                            }
+                        }
+                        catch
+                        {
+                            // Nothing
                         }
 
                         return result switch
