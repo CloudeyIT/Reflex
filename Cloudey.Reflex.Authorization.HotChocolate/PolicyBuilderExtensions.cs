@@ -63,6 +63,14 @@ public static class PolicyBuilderExtensions
                     case IMiddlewareContext middlewareContext:
                     {
                         var result = middlewareContext.Result;
+                        
+                        if (result?.GetType().IsAssignableTo(typeof(IReadOnlyList<T>)) == true)
+                        {
+                            // Hot Chocolate 14 changed the type of paged items to a private sealed class (CollectionWrapper),
+                            // which makes it impossible to properly match in the switch case below.
+                            // This cast ensures we can match on the result type.
+                            result = (IEnumerable<T>)result;
+                        }
 
                         return result switch
                         {
@@ -117,6 +125,14 @@ public static class PolicyBuilderExtensions
                     case IMiddlewareContext middlewareContext:
                     {
                         var result = middlewareContext.Result;
+
+                        if (result?.GetType().IsAssignableTo(typeof(IReadOnlyList<T>)) == true)
+                        {
+                            // Hot Chocolate 14 changed the type of paged items to a private sealed class (CollectionWrapper),
+                            // which makes it impossible to properly match in the switch case below.
+                            // This cast ensures we can match on the result type.
+                            result = (IEnumerable<T>)result;
+                        }
 
                         return result switch
                         {
@@ -241,6 +257,14 @@ public static class PolicyBuilderExtensions
                     case IMiddlewareContext middlewareContext:
                     {
                         var result = middlewareContext.Result;
+                        
+                        if (result?.GetType().IsAssignableTo(typeof(IReadOnlyList<T>)) == true)
+                        {
+                            // Hot Chocolate 14 changed the type of paged items to a private sealed class (CollectionWrapper),
+                            // which makes it impossible to properly match in the switch case below.
+                            // This cast ensures we can match on the result type.
+                            result = (IEnumerable<T>)result;
+                        }
 
                         return result switch
                         {
@@ -301,6 +325,14 @@ public static class PolicyBuilderExtensions
                     case IMiddlewareContext middlewareContext:
                     {
                         var result = middlewareContext.Result;
+                        
+                        if (result?.GetType().IsAssignableTo(typeof(IReadOnlyList<T>)) == true)
+                        {
+                            // Hot Chocolate 14 changed the type of paged items to a private sealed class (CollectionWrapper),
+                            // which makes it impossible to properly match in the switch case below.
+                            // This cast ensures we can match on the result type.
+                            result = (IEnumerable<T>)result;
+                        }
 
                         return result switch
                         {
